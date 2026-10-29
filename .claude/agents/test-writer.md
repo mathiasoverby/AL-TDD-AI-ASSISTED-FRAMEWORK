@@ -22,6 +22,9 @@ objects, including the stub (written by a human or by the stub-writer agent; fro
    requirement**. Assert real values/messages; a test that only calls the procedure is wrong.
 4. The test must compile against the stub and fail **because the required behaviour is absent**, not
    because of missing setup, missing dependencies or wrong assumptions.
+   Never put the property `TestIsolation` on the test codeunit: it is only allowed on `Subtype = TestRunner`
+   (AL0223, a compile error, never a valid RED). The runner already rolls back the database changes of a test
+   codeunit; use unique keys per test instead of relying on isolation between tests.
 5. On a correction round you receive a script verdict and output. Fix only what that output shows. Do
    not weaken or delete assertions to get past a failure, and do not edit the stub or production code.
 

@@ -64,8 +64,17 @@ Skip this phase when `stub: provided`: a human already added the stub.
 9. Run `scripts/freeze-tests.ps1 -Action Verify`. If any test file changed, the run is **invalid**:
    report `TEST_TAMPERED` and stop.
 
-## Phase 3 - REFACTOR (optional, not measured)
-10. Delegate to **refactorer**. Re-run step 8 and step 9. Revert its change if tests break.
+## Phase 3 - REFACTOR (controlled by `RunRefactor` in `scripts/config.psd1`)
+Read `RunRefactor` from `scripts/config.psd1`. When it is `$false`, skip this phase and say so in the report.
+Otherwise:
+10a. Run `scripts/refactor-snapshot.ps1 -Requirement $ARGUMENTS -Action Snapshot` (saves the green code).
+10b. Delegate to **refactorer** (description `REFACTOR · refactorer · round 1`).
+10c. Re-run step 8 (`-Phase green`) and step 9 (`freeze-tests.ps1 -Action Verify`).
+     - Tests pass and tests unchanged -> keep the refactoring.
+     - Tests fail or a test file changed -> run `scripts/refactor-snapshot.ps1 -Requirement $ARGUMENTS -Action Restore`,
+       re-run step 8 to confirm green again, and report `REFACTOR_REVERTED`. Do not send the failure back to the
+       refactorer for a correction round.
+10d. Run `scripts/refactor-snapshot.ps1 -Requirement $ARGUMENTS -Action Diff` and include its output path in the report.
 
 ## Report
 Finish with a short table: phase, rounds used, final verdict, files created/changed, and the paths of

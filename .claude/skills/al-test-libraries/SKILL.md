@@ -16,7 +16,18 @@ groups). The standard test libraries create that setup for you. **Prefer them ov
 | Random text/decimal/dates (avoids clashes) | `Library - Random` |
 | Misc. (`GenerateGUID`, no. series) | `Library - Utility` |
 | Cross-handler values | `Library - Variable Storage` |
-| Test with restricted permissions | `Library - Lower Permissions` |
+| Test with restricted permissions | `Library - Lower Permissions` (not in Application Test Library; check) |
+| Dimensions, default dimensions, dimension values | `Library - Dimension` |
+| Projects (jobs), job tasks, planning lines | `Library - Job` |
+| Fixed assets | `Library - Fixed Asset` |
+| Finance charge memos, finance charge terms | `Library - Finance Charge Memo` |
+| General setup, G/L accounts, posting groups, currencies | `Library - ERM` |
+| Employees, qualifications | `Library - Human Resource` |
+| Random values without a seed (`Any.AlphanumericText`) | `Any` - needs `using System.TestLibraries.Utilities;` |
+
+Verified in the BC 28 container (`Application Test Library` 28.0.46665): all `Library - ...` codeunits above live
+in the global namespace, so no `using` is needed for them. `Any` is the exception (namespace above).
+`app.json` already depends on `Application Test Library`, `Any`, `Library Variable Storage` and `Library Assert`.
 
 ## Procedure
 1. Check which libraries are available: search `.alpackages` / the symbols of the test library app

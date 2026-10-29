@@ -13,9 +13,36 @@
     ]
   },
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
+      "PowerShell(powershell *scripts*)",
+      "PowerShell(*scripts\\*.ps1*)",
+      "PowerShell(*scripts/*.ps1*)",
+      "Bash(powershell *scripts*)",
+      "PowerShell(*claude-usage*)",
+      "PowerShell(*run-log.jsonl*)",
+      "PowerShell(*.tdd*)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(New-Item -ItemType Directory *)",
+      "Edit",
+      "Write",
       "PowerShell(powershell -File scripts/*)",
-      "PowerShell(.\\scripts\\*)"
+      "PowerShell(.\\scripts\\*)",
+      "PowerShell(powershell -NoProfile -File scripts/*)",
+      "PowerShell(powershell -NoProfile -File scripts\\*)",
+      "PowerShell(.\\\\scripts\\\\*)",
+      "PowerShell(docker start *)",
+      "PowerShell(docker ps *)",
+      "PowerShell(docker inspect *)",
+      "PowerShell(docker info *)",
+      "PowerShell(docker version *)",
+      "PowerShell(Add-Content .tdd/*)",
+      "Bash(powershell -NoProfile -File scripts/*)",
+      "Edit(src/**)",
+      "Edit(test/**)",
+      "Edit(stubs/**)",
+      "Edit(.tdd/**)",
+      "Edit(requirements/**)"
     ]
   }
 }

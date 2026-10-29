@@ -20,7 +20,11 @@ if (-not $alc) { throw 'alc.exe not found. Set AlcPath in scripts\config.psd1.' 
 
 $out = Join-Path $app '.output'
 New-Item -ItemType Directory -Force -Path $out | Out-Null
-$raw = & $alc "/project:$app" "/packagecachepath:$(Join-Path $app '.alpackages')" "/out:$out" 2>&1 | Out-String
+# Newer alc.exe wants /out to be the .app FILE path (a directory gives AL1012), named like the AL extension does.
+$appJson = Get-Content (Join-Path $app 'app.json') -Raw | ConvertFrom-Json
+$outFile = Join-Path $out "$($appJson.publisher)_$($appJson.name)_$($appJson.version).app"
+Get-ChildItem $out -Filter *.app -ErrorAction SilentlyContinue | Remove-Item -Force   # never pick up a stale .app
+$raw = & $alc "/project:$app" "/packagecachepath:$(Join-Path $app '.alpackages')" "/out:$outFile" 2>&1 | Out-String
 
 # Diagnostic format: path(line,col): error AL0118: message
 $errors = @()

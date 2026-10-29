@@ -1,0 +1,8 @@
+.alpackages/
+.output/
+.tdd/
+.tdd-archive/
+*.app
+.altestrunner/
+.vscode/.alcache/
+scripts/local.credentials.psd1

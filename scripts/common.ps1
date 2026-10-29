@@ -6,6 +6,15 @@ $script:Config   = Import-PowerShellDataFile (Join-Path $PSScriptRoot 'config.ps
 $script:TddDir   = Join-Path $RepoRoot '.tdd'
 New-Item -ItemType Directory -Force -Path $TddDir | Out-Null
 
+# Fallback for container credentials when the environment variables are not set: scripts\local.credentials.psd1
+# (git-ignored), e.g. @{ BC_USERNAME = 'user'; BC_PASSWORD = 'secret' }
+$credFile = Join-Path $PSScriptRoot 'local.credentials.psd1'
+if ((-not $env:BC_USERNAME -or -not $env:BC_PASSWORD) -and (Test-Path $credFile)) {
+    $c = Import-PowerShellDataFile $credFile
+    if (-not $env:BC_USERNAME) { $env:BC_USERNAME = $c.BC_USERNAME }
+    if (-not $env:BC_PASSWORD) { $env:BC_PASSWORD = $c.BC_PASSWORD }
+}
+
 function Get-AppFolder { (Resolve-Path (Join-Path $RepoRoot $Config.AppFolder)).Path }
 
 function Get-Requirement([string]$Id) {
